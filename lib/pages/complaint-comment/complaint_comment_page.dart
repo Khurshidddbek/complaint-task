@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:task/domains/complaint_service.dart';
 import 'package:task/helper-pages/close_keyboard_view.dart';
 import 'package:task/models/complaint_type.dart';
 import 'package:task/pages/complaint-status/complaint_status_page.dart';
@@ -7,6 +9,7 @@ import 'package:task/widgets/default_button_widget.dart';
 
 import '../../configs/app_colors.dart';
 import '../../configs/app_padding.dart';
+import '../../data-providers/complaint_data.dart';
 
 class ComplaintCommentPage extends StatefulWidget {
   static const String id = "complaint-comment-page";
@@ -19,12 +22,46 @@ class ComplaintCommentPage extends StatefulWidget {
 }
 
 class _ComplaintCommentPageState extends State<ComplaintCommentPage> {
-  // #TODO: must come from the backend.
-  final name = "Константин";
-
-  final surname = "Володарский";
-
+  late ComplaintData dataProvider;
   final inputController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    dataProvider = Provider.of<ComplaintData>(context, listen: false);
+    dataProvider.updateSelectedComplaintType(widget.complaintType);
+  }
+
+  void apiSendComplaint() async {
+    if (dataProvider.selectedComplaintType == null) {
+      // #TODO: show something
+      return;
+    }
+
+    bool statusResult = await ComplaintService().requestComplaint(
+      context,
+      dataProvider.userId,
+      dataProvider.selectedComplaintType!.title.toString(),
+      inputController.text,
+    );
+
+    if (context.mounted) {
+      Navigator.pushReplacement(
+        context,
+        PageRouteBuilder(
+          pageBuilder: (context, animation, secondaryAnimation) =>
+              ComplaintStatusPage(success: statusResult),
+          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+            return FadeTransition(
+              opacity: animation,
+              child: child,
+            );
+          },
+          transitionDuration: const Duration(milliseconds: 200),
+        ),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -93,27 +130,7 @@ class _ComplaintCommentPageState extends State<ComplaintCommentPage> {
                           const SizedBox(height: AppPaddings.side),
 
                           DefaultButton(
-                            onPressed: () {
-                              // TODO: loading animation and status result
-                              // #navigate to complaint status page
-                              Navigator.pushReplacement(
-                                context,
-                                PageRouteBuilder(
-                                  pageBuilder: (context, animation,
-                                          secondaryAnimation) =>
-                                      const ComplaintStatusPage(success: true),
-                                  transitionsBuilder: (context, animation,
-                                      secondaryAnimation, child) {
-                                    return FadeTransition(
-                                      opacity: animation,
-                                      child: child,
-                                    );
-                                  },
-                                  transitionDuration:
-                                      const Duration(milliseconds: 200),
-                                ),
-                              );
-                            },
+                            onPressed: () => apiSendComplaint(),
                             text: "Отправить жалобу",
                             isActive: widget.complaintType.commentOptional ||
                                 inputController.text.isNotEmpty,

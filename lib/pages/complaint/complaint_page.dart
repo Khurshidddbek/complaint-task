@@ -1,40 +1,34 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 import 'package:task/configs/app_colors.dart';
 import 'package:task/configs/app_padding.dart';
+import 'package:task/data-providers/complaint_data.dart';
 import 'package:task/models/complaint_type.dart';
 
 import '../complaint-comment/complaint_comment_page.dart';
 
-class ComplaintPage extends StatelessWidget {
+class ComplaintPage extends StatefulWidget {
   static const String id = "complaint-page";
-  ComplaintPage({super.key});
+  const ComplaintPage({super.key});
 
-  // #TODO: must come from the backend.
-  final name = "Константин";
+  @override
+  State<ComplaintPage> createState() => _ComplaintPageState();
+}
 
-  // #TODO: can come from the backend.
-  final List<ComplaintType> complaintTypes = [
-    ComplaintType(
-      title: "Спам",
-    ),
-    ComplaintType(
-      title: "Мошенничество",
-      description:
-          "Отправьте жалобу, если пользователь пытается обмануть вас или получить доступ к вашей личной информации.",
-      commentOptional: false,
-    ),
-    ComplaintType(
-      title: "Оскорбления",
-      description:
-          "Отправьте жалобу, если пользователь оскорбляет вас или других пользователей.",
-    ),
-    ComplaintType(title: "Откровенное изображение"),
-    ComplaintType(title: "Проблема с профилем"),
-    ComplaintType(title: "Нарушение интеллектуальных прав"),
-    ComplaintType(title: "Прочее"),
-  ];
+class _ComplaintPageState extends State<ComplaintPage> {
+  List<ComplaintType> complaintTypes = [];
+  String name = "?";
+
+  @override
+  void initState() {
+    super.initState();
+
+    var dataProvider = Provider.of<ComplaintData>(context, listen: false);
+    complaintTypes = dataProvider.complaintTypes;
+    name = dataProvider.name;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -108,29 +102,45 @@ class ComplaintPage extends StatelessWidget {
   }
 }
 
-class ComplaintHeaderWidget extends StatelessWidget {
+class ComplaintHeaderWidget extends StatefulWidget {
   final bool showBackButton;
   const ComplaintHeaderWidget({
     this.showBackButton = false,
     super.key,
   });
 
-  // #TODO: must come from the backend.
-  final name = "Константин";
-  final surname = "Володарский";
+  @override
+  State<ComplaintHeaderWidget> createState() => _ComplaintHeaderWidgetState();
+}
+
+class _ComplaintHeaderWidgetState extends State<ComplaintHeaderWidget> {
+  String name = "?";
+  String surname = "?";
+
+  @override
+  void initState() {
+    super.initState();
+
+    var dataProvider = Provider.of<ComplaintData>(context, listen: false);
+    name = dataProvider.name;
+    surname = dataProvider.surname;
+  }
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
+        //
+        const SizedBox(height: AppPaddings.side),
+
         Stack(
           children: [
             // #button : back
             IconButton(
               onPressed: () {
-                if (showBackButton) Navigator.pop(context);
+                if (widget.showBackButton) Navigator.pop(context);
               },
-              icon: Icon(showBackButton
+              icon: Icon(widget.showBackButton
                   ? CupertinoIcons.arrow_left
                   : CupertinoIcons.clear),
             ),
