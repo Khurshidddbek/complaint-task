@@ -34,7 +34,9 @@ class _ComplaintCommentPageState extends State<ComplaintCommentPage> {
               children: [
                 // #button : back
                 IconButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
                   icon: const Icon(CupertinoIcons.arrow_left),
                 ),
 
