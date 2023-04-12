@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:task/models/complaint_type.dart';
+import 'package:task/pages/complaint-comment/complaint_comment_page.dart';
+import 'package:task/pages/complaint-status/complaint_status_page.dart';
 import 'package:task/pages/complaint/complaint_page.dart';
+import 'package:task/pages/home/home_page.dart';
 
 import 'configs/app_themes.dart';
 
@@ -15,7 +19,6 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Task',
       theme: AppThemes.lightAppTheme,
-      home: ComplaintPage(),
 
       /// to avoid changing the textscale-related part of the user's settings
       builder: (context, child) {
@@ -23,6 +26,17 @@ class MyApp extends StatelessWidget {
           data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
           child: child!,
         );
+      },
+
+      // route settings
+      initialRoute: ComplaintPage.id,
+      routes: {
+        HomePage.id: (context) => const HomePage(),
+        ComplaintPage.id: (context) => ComplaintPage(),
+        ComplaintCommentPage.id: (context) =>
+            ComplaintCommentPage(complaintType: ComplaintType(title: "")),
+        ComplaintStatusPage.id: (context) =>
+            const ComplaintStatusPage(success: true),
       },
     );
   }

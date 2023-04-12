@@ -3,12 +3,15 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:task/helper-pages/close_keyboard_view.dart';
 import 'package:task/models/complaint_type.dart';
+import 'package:task/pages/complaint-status/complaint_status_page.dart';
 import 'package:task/widgets/default_button_widget.dart';
 
 import '../../configs/app_colors.dart';
 import '../../configs/app_padding.dart';
 
 class ComplaintCommentPage extends StatefulWidget {
+  static const String id = "complaint-comment-page";
+
   final ComplaintType complaintType;
   const ComplaintCommentPage({required this.complaintType, super.key});
 
@@ -139,7 +142,16 @@ class _ComplaintCommentPageState extends State<ComplaintCommentPage> {
                           const SizedBox(height: AppPaddings.side),
 
                           DefaultButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              // TODO: loading animation and status result
+                              Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      const ComplaintStatusPage(success: true),
+                                ),
+                              );
+                            },
                             text: "Отправить жалобу",
                             isActive: widget.complaintType.commentOptional ||
                                 inputController.text.isNotEmpty,

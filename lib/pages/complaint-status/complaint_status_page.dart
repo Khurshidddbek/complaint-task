@@ -8,6 +8,8 @@ import '../../configs/app_colors.dart';
 import '../../configs/app_padding.dart';
 
 class ComplaintStatusPage extends StatelessWidget {
+  static const String id = "complaint-status-page";
+
   /// true: Модераторы скоро рассмотрят вашу жалобу.
   /// false: Пожалуйста, попробуйте еще раз позже.
   final bool success;

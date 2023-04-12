@@ -4,8 +4,10 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:task/configs/app_colors.dart';
 import 'package:task/configs/app_padding.dart';
 import 'package:task/models/complaint_type.dart';
+import 'package:task/pages/complaint-comment/complaint_comment_page.dart';
 
 class ComplaintPage extends StatelessWidget {
+  static const String id = "complaint-page";
   ComplaintPage({super.key});
 
   // #TODO: must come from the backend.
@@ -112,7 +114,16 @@ class ComplaintPage extends StatelessWidget {
                         padding: const EdgeInsets.symmetric(vertical: 6),
                         itemCount: complaintTypes.length,
                         itemBuilder: (context, index) => InkWell(
-                          onTap: () {},
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => ComplaintCommentPage(
+                                  complaintType: complaintTypes[index],
+                                ),
+                              ),
+                            );
+                          },
                           child: Padding(
                             padding: const EdgeInsets.symmetric(vertical: 6),
                             child: Text(complaintTypes[index].title),
