@@ -9,7 +9,6 @@ import 'package:task/pages/nav-bar/nav_bar_page.dart';
 
 import 'configs/app_themes.dart';
 
-
 void main() {
   runApp(const MyApp());
 }
@@ -37,7 +36,7 @@ class MyApp extends StatelessWidget {
         initialRoute: NavBarPage.id,
         routes: {
           NavBarPage.id: (context) => const NavBarPage(),
-          ComplaintPage.id: (context) => ComplaintPage(),
+          ComplaintPage.id: (context) => const ComplaintPage(),
           ComplaintCommentPage.id: (context) =>
               ComplaintCommentPage(complaintType: ComplaintType(title: "")),
           ComplaintStatusPage.id: (context) =>

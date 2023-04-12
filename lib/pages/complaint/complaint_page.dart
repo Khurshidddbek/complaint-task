@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:persistent_bottom_nav_bar_v2/persistent-tab-view.dart';
 import 'package:provider/provider.dart';
 import 'package:task/configs/app_colors.dart';
 import 'package:task/configs/app_padding.dart';
@@ -11,7 +12,9 @@ import '../complaint-comment/complaint_comment_page.dart';
 
 class ComplaintPage extends StatefulWidget {
   static const String id = "complaint-page";
-  const ComplaintPage({super.key});
+
+  final PersistentTabController? navBarController;
+  const ComplaintPage({this.navBarController, super.key});
 
   @override
   State<ComplaintPage> createState() => _ComplaintPageState();
@@ -37,7 +40,7 @@ class _ComplaintPageState extends State<ComplaintPage> {
         child: Column(
           children: [
             // #header
-            const ComplaintHeaderWidget(),
+            ComplaintHeaderWidget(navBarController: widget.navBarController),
 
             const SizedBox(height: 24),
 
@@ -103,8 +106,11 @@ class _ComplaintPageState extends State<ComplaintPage> {
 }
 
 class ComplaintHeaderWidget extends StatefulWidget {
+  final PersistentTabController? navBarController;
   final bool showBackButton;
+
   const ComplaintHeaderWidget({
+    this.navBarController,
     this.showBackButton = false,
     super.key,
   });
@@ -138,7 +144,11 @@ class _ComplaintHeaderWidgetState extends State<ComplaintHeaderWidget> {
             // #button : back
             IconButton(
               onPressed: () {
-                if (widget.showBackButton) Navigator.pop(context);
+                if (widget.showBackButton) {
+                  Navigator.pop(context);
+                } else {
+                  widget.navBarController?.jumpToTab(0);
+                }
               },
               icon: Icon(widget.showBackButton
                   ? CupertinoIcons.arrow_left

@@ -13,13 +13,10 @@ class NavBarPage extends StatefulWidget {
 }
 
 class _NavBarPageState extends State<NavBarPage> {
-  var pages = [
-    const Center(child: Text("Home")),
-    ComplaintPage(),
-    const Center(child: Text("Add Something")),
-    const Center(child: Text("Search")),
-    const Center(child: Text("Profile")),
-  ];
+  late PersistentTabController navBarController;
+
+  List<Widget> pages = [];
+
   var pageItems = [
     PersistentBottomNavBarItem(
       icon: const Icon(CupertinoIcons.home),
@@ -54,10 +51,25 @@ class _NavBarPageState extends State<NavBarPage> {
   ];
 
   @override
+  void initState() {
+    super.initState();
+
+    navBarController = PersistentTabController(initialIndex: 0);
+    pages = [
+      const Center(child: Text("Home")),
+      ComplaintPage(navBarController: navBarController),
+      const Center(child: Text("Add Something")),
+      const Center(child: Text("Search")),
+      const Center(child: Text("Profile")),
+    ];
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: PersistentTabView(
         context,
+        controller: navBarController,
         screens: pages,
         items: pageItems,
         navBarStyle: NavBarStyle.style12,
