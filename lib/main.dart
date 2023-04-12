@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:task/models/complaint_type.dart';
+import 'package:task/pages/bottom-nav-bar/bottom_nav_bar_page.dart';
 import 'package:task/pages/complaint-comment/complaint_comment_page.dart';
 import 'package:task/pages/complaint-status/complaint_status_page.dart';
 import 'package:task/pages/complaint/complaint_page.dart';
-import 'package:task/pages/home/home_page.dart';
 
 import 'configs/app_themes.dart';
 
@@ -29,9 +29,9 @@ class MyApp extends StatelessWidget {
       },
 
       // route settings
-      initialRoute: ComplaintPage.id,
+      initialRoute: BottomNavBarPage.id,
       routes: {
-        HomePage.id: (context) => const HomePage(),
+        BottomNavBarPage.id: (context) => BottomNavBarPage(),
         ComplaintPage.id: (context) => ComplaintPage(),
         ComplaintCommentPage.id: (context) =>
             ComplaintCommentPage(complaintType: ComplaintType(title: "")),
