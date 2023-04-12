@@ -1,11 +1,9 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:task/configs/app_assets.dart';
 import 'package:task/widgets/default_button_widget.dart';
 
-import '../../configs/app_colors.dart';
 import '../../configs/app_padding.dart';
+import '../complaint/complaint_page.dart';
 
 class ComplaintStatusPage extends StatelessWidget {
   static const String id = "complaint-status-page";
@@ -26,55 +24,7 @@ class ComplaintStatusPage extends StatelessWidget {
         child: Column(
           children: [
             // #header
-            Stack(
-              children: [
-                // #button : back
-                IconButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  icon: const Icon(CupertinoIcons.arrow_left),
-                ),
-
-                SizedBox(
-                  width: double.infinity,
-                  child: Column(
-                    children: [
-                      CircleAvatar(
-                        radius: 32,
-                        backgroundColor: AppColors.grey,
-                        child: Text(
-                          name.isNotEmpty ? name[0] : "?",
-                          style: TextStyle(
-                            fontSize: 32,
-                            color: AppColors.black,
-                            fontStyle: GoogleFonts.nunito().fontStyle,
-                          ),
-                        ),
-                      ),
-
-                      const SizedBox(height: AppPaddings.side),
-
-                      // #username
-                      Text(
-                        "$name $surname",
-                        style: const TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-
-            const SizedBox(height: AppPaddings.side),
-
-            const Divider(
-              thickness: 1,
-              height: 1,
-            ),
+            const ComplaintHeaderWidget(showBackButton: true),
 
             const SizedBox(height: 24),
 

@@ -4,7 +4,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:task/configs/app_colors.dart';
 import 'package:task/configs/app_padding.dart';
 import 'package:task/models/complaint_type.dart';
-import 'package:task/pages/complaint-comment/complaint_comment_page.dart';
+
+import '../complaint-comment/complaint_comment_page.dart';
 
 class ComplaintPage extends StatelessWidget {
   static const String id = "complaint-page";
@@ -12,7 +13,6 @@ class ComplaintPage extends StatelessWidget {
 
   // #TODO: must come from the backend.
   final name = "Константин";
-  final surname = "Володарский";
 
   // #TODO: can come from the backend.
   final List<ComplaintType> complaintTypes = [
@@ -43,53 +43,7 @@ class ComplaintPage extends StatelessWidget {
         child: Column(
           children: [
             // #header
-            Stack(
-              children: [
-                // #button : back
-                IconButton(
-                  onPressed: () {},
-                  icon: const Icon(CupertinoIcons.clear),
-                ),
-
-                SizedBox(
-                  width: double.infinity,
-                  child: Column(
-                    children: [
-                      CircleAvatar(
-                        radius: 32,
-                        backgroundColor: AppColors.grey,
-                        child: Text(
-                          name.isNotEmpty ? name[0] : "?",
-                          style: TextStyle(
-                            fontSize: 32,
-                            color: AppColors.black,
-                            fontStyle: GoogleFonts.nunito().fontStyle,
-                          ),
-                        ),
-                      ),
-
-                      const SizedBox(height: AppPaddings.side),
-
-                      // #username
-                      Text(
-                        "$name $surname",
-                        style: const TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-
-            const SizedBox(height: AppPaddings.side),
-
-            const Divider(
-              thickness: 1,
-              height: 1,
-            ),
+            const ComplaintHeaderWidget(),
 
             const SizedBox(height: 24),
 
@@ -115,12 +69,24 @@ class ComplaintPage extends StatelessWidget {
                         itemCount: complaintTypes.length,
                         itemBuilder: (context, index) => InkWell(
                           onTap: () {
+                            // #navigate to comment page
                             Navigator.push(
                               context,
-                              MaterialPageRoute(
-                                builder: (context) => ComplaintCommentPage(
+                              PageRouteBuilder(
+                                pageBuilder:
+                                    (context, animation, secondaryAnimation) =>
+                                        ComplaintCommentPage(
                                   complaintType: complaintTypes[index],
                                 ),
+                                transitionsBuilder: (context, animation,
+                                    secondaryAnimation, child) {
+                                  return FadeTransition(
+                                    opacity: animation,
+                                    child: child,
+                                  );
+                                },
+                                transitionDuration:
+                                    const Duration(milliseconds: 200),
                               ),
                             );
                           },
@@ -138,6 +104,75 @@ class ComplaintPage extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+}
+
+class ComplaintHeaderWidget extends StatelessWidget {
+  final bool showBackButton;
+  const ComplaintHeaderWidget({
+    this.showBackButton = false,
+    super.key,
+  });
+
+  // #TODO: must come from the backend.
+  final name = "Константин";
+  final surname = "Володарский";
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Stack(
+          children: [
+            // #button : back
+            IconButton(
+              onPressed: () {
+                if (showBackButton) Navigator.pop(context);
+              },
+              icon: Icon(showBackButton
+                  ? CupertinoIcons.arrow_left
+                  : CupertinoIcons.clear),
+            ),
+
+            SizedBox(
+              width: double.infinity,
+              child: Column(
+                children: [
+                  CircleAvatar(
+                    radius: 32,
+                    backgroundColor: AppColors.grey,
+                    child: Text(
+                      name.isNotEmpty ? name[0] : "?",
+                      style: TextStyle(
+                        fontSize: 32,
+                        color: AppColors.black,
+                        fontStyle: GoogleFonts.nunito().fontStyle,
+                      ),
+                    ),
+                  ),
+
+                  const SizedBox(height: AppPaddings.side),
+
+                  // #username
+                  Text(
+                    "$name $surname",
+                    style: const TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: AppPaddings.side),
+        const Divider(
+          thickness: 1,
+          height: 1,
+        ),
+      ],
     );
   }
 }

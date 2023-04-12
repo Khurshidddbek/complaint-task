@@ -1,9 +1,8 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:task/helper-pages/close_keyboard_view.dart';
 import 'package:task/models/complaint_type.dart';
 import 'package:task/pages/complaint-status/complaint_status_page.dart';
+import 'package:task/pages/complaint/complaint_page.dart';
 import 'package:task/widgets/default_button_widget.dart';
 
 import '../../configs/app_colors.dart';
@@ -35,55 +34,7 @@ class _ComplaintCommentPageState extends State<ComplaintCommentPage> {
           child: Column(
             children: [
               // #header
-              Stack(
-                children: [
-                  // #button : back
-                  IconButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    icon: const Icon(CupertinoIcons.arrow_left),
-                  ),
-
-                  SizedBox(
-                    width: double.infinity,
-                    child: Column(
-                      children: [
-                        CircleAvatar(
-                          radius: 32,
-                          backgroundColor: AppColors.grey,
-                          child: Text(
-                            name.isNotEmpty ? name[0] : "?",
-                            style: TextStyle(
-                              fontSize: 32,
-                              color: AppColors.black,
-                              fontStyle: GoogleFonts.nunito().fontStyle,
-                            ),
-                          ),
-                        ),
-
-                        const SizedBox(height: AppPaddings.side),
-
-                        // #username
-                        Text(
-                          "$name $surname",
-                          style: const TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-
-              const SizedBox(height: AppPaddings.side),
-
-              const Divider(
-                thickness: 1,
-                height: 1,
-              ),
+              const ComplaintHeaderWidget(showBackButton: true),
 
               const SizedBox(height: 24),
 
@@ -144,11 +95,22 @@ class _ComplaintCommentPageState extends State<ComplaintCommentPage> {
                           DefaultButton(
                             onPressed: () {
                               // TODO: loading animation and status result
+                              // #navigate to complaint status page
                               Navigator.pushReplacement(
                                 context,
-                                MaterialPageRoute(
-                                  builder: (context) =>
+                                PageRouteBuilder(
+                                  pageBuilder: (context, animation,
+                                          secondaryAnimation) =>
                                       const ComplaintStatusPage(success: true),
+                                  transitionsBuilder: (context, animation,
+                                      secondaryAnimation, child) {
+                                    return FadeTransition(
+                                      opacity: animation,
+                                      child: child,
+                                    );
+                                  },
+                                  transitionDuration:
+                                      const Duration(milliseconds: 200),
                                 ),
                               );
                             },
